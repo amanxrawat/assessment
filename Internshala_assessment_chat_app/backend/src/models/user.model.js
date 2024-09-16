@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 // creating the userSchema
 const userSchema = new mongoose.Schema({
-    username: {
+    userName: {
         type: String,
         required: true,
         unique: true,
@@ -42,14 +42,7 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         default: []
     },
-    profilePicture: {
-        type: String,
-        default: ''
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
+    
 }, { timestamps: true });
 
 
