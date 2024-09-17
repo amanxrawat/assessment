@@ -18,7 +18,7 @@ router.route('/login',loginUser)
 
 router.route('/friend-request/:recipientID').post(verifyJWT,sendFriendRequest);
 router.route('/accept-friend/:senderId').post(verifyJWT,acceptFriendRequest);
-router.route('reject-friend/:senderId').post(verifyJWT,rejectFriendRequest);
+router.route('/reject-friend/:senderId').post(verifyJWT,rejectFriendRequest);
 router.route('/unfriend/:friendId').delete( verifyJWT, unfriend);
 
 router.route('/friends').get(verifyJWT,getFriends);
