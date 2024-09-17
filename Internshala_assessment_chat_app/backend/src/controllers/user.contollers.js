@@ -196,9 +196,10 @@ const rejectFriendRequest = async (req, res) => {
   
       await recipient.save();
   
-      res.status(200).json({ message: 'Friend request rejected' });
+      res.status(200).json(new ApiResponse(200,message="rejected the freind request"));
     } catch (error) {
-      res.status(500).json({ message: 'Error rejecting friend request' });
+      console.log(error)
+      throw new ApiError(500,"Error rejecting friend request ")
     }
   };
   
@@ -217,9 +218,10 @@ const unfriend = async (req, res) => {
       await user.save();
       await friend.save();
   
-      res.status(200).json({ message: 'Unfriended successfully' });
+      res.status(200).json(new ApiResponse(200,friend.userName,"unfriended successfully "));
     } catch (error) {
-      res.status(500).json({ message: 'Error unfriending user' });
+      console.log(error)
+      throw new ApiError(500,"Error unfriending the user")
     }
   };
 
@@ -232,13 +234,37 @@ const recommendFriends = async (req, res) => {
         friendList: { $in: user.friendList.map(friend => friend._id) }, // Mutual friends
       }).limit(5);
   
-      res.status(200).json(recommendations);
+      res.status(200).json(new ApiResponse(200,recommendations,"friend recommendation for the user "));
     } catch (error) {
-      res.status(500).json({ message: 'Error retrieving friend recommendations' });
+      console.log(error)
+      throw new ApiError(500,"Error during  recommending friends to the user")
     }
   };
   
 
-export {signUpUser,generateAccessToken ,loginUser,
-   logoutUser, getUser, sendFriendRequest,
-   recommendFriends, unfriend , acceptFriendRequest , rejectFriendRequest}
+const getFriends = async (req, res) => {
+    try {
+      const user = await User.findById(req.user.id).populate('friendList', 'username');
+  
+      res.status(200).json(new ApiResponse(200,user.friendList,"successfully fetched the user's friend list "));
+    } catch (error) {
+      console.log(error)
+      throw new ApiError(500,"Error reteriving friend list")
+    }
+  };
+  
+
+export {
+  signUpUser,
+  generateAccessToken ,
+  loginUser,
+  logoutUser, 
+  getUser, 
+  sendFriendRequest,
+  recommendFriends, 
+  unfriend, 
+  acceptFriendRequest,
+  rejectFriendRequest,
+  getFriends
+
+  }
